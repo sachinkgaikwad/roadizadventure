@@ -8,7 +8,8 @@
 .idea/
 *.iml
 .project
-
+#custom
+index1.html
 # Other common files/folders
 node_modules/
 dist/
