@@ -1,0 +1,15 @@
+# macOS specific files
+.DS_Store
+._*
+*.swp
+.localized
+
+# IDE files
+.idea/
+*.iml
+.project
+
+# Other common files/folders
+node_modules/
+dist/
+build/
