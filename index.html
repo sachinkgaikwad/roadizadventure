@@ -1,146 +1,438 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="data/style.css">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roadiez Adventure Club</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-yHRe+5btYM9FZ8mWzHRQ4gdF9/9XAG5gyTGr2gGCdeYUyGqGde4G4Ow6Ml62EuL3A9nYUKK7XIBJxGo4c7c3vA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
-  /* Animated Logo Letters */
-  .logo-letter {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(-30px);
-    animation: dropLetter 0.5s forwards;
-  }
-  @keyframes dropLetter {
-    to { opacity: 1; transform: translateY(0); }
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* Hero Slider */
-  .slide { display: none; position: absolute; inset: 0; background-size: cover; background-position: center; transition: opacity 0.8s ease-in-out; }
-  .slide.active { display: block; }
+/* ===== ANIMATED LOGO ===== */
+.logo-letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(-40px);
+  animation: dropLetter 0.4s forwards;
+  color: #ef4444;
+  font-weight: 900;
+  letter-spacing: 4px;
+}
+@keyframes dropLetter {
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  /* Gallery hover */
-  .gallery-img { overflow: hidden; border-radius: 12px; }
-  .gallery-img img { transition: transform 0.4s ease; width: 100%; height: 200px; object-fit: cover; }
-  .gallery-img img:hover { transform: scale(1.08); }
+/* ===== HERO SLIDER ===== */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+.hero-slide.active { opacity: 1; }
+
+/* ===== MOTION STRIP ===== */
+.strip-track {
+  display: flex;
+  gap: 16px;
+  animation: scrollStrip 25s linear infinite;
+  width: max-content;
+}
+.strip-track:hover { animation-play-state: paused; }
+@keyframes scrollStrip {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.strip-img {
+  width: 280px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #ef444422;
+  flex-shrink: 0;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.strip-img:hover {
+  transform: scale(1.05);
+  border-color: #ef4444;
+}
+
+/* ===== GALLERY LIGHTBOX ===== */
+.gallery-item {
+  overflow: hidden;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+}
+.gallery-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+.gallery-item:hover img { transform: scale(1.08); }
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: #ef444466;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 28px;
+  color: white;
+}
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+
+/* Lightbox */
+#lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #000000ee;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+#lightbox.open { display: flex; }
+#lightbox img {
+  max-width: 90vw;
+  max-height: 85vh;
+  border-radius: 10px;
+  border: 2px solid #ef4444;
+}
+#lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 28px;
+  color: white;
+  font-size: 36px;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+/* ===== FLOATING REGISTER ===== */
+.floating-register {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: #ef4444;
+  color: white;
+  padding: 14px 22px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  z-index: 999;
+  box-shadow: 0 4px 24px #ef444466;
+  animation: pulse 2s infinite;
+  letter-spacing: 1px;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 4px 24px #ef444466; }
+  50% { box-shadow: 0 4px 40px #ef4444aa; }
+}
+
+/* ===== SCROLL ANIMATIONS ===== */
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== NAV ===== */
+nav a {
+  position: relative;
+}
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #ef4444;
+  transition: width 0.3s;
+}
+nav a:hover::after { width: 100%; }
+
+/* ===== SECTION TITLES ===== */
+.section-badge {
+  display: inline-block;
+  background: #ef444422;
+  border: 1px solid #ef444444;
+  color: #ef4444;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  padding: 4px 16px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+/* ===== EVENT CARDS ===== */
+.event-card {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.event-card:hover {
+  transform: translateY(-6px);
+  border-color: #ef4444;
+}
+.event-card-top {
+  height: 6px;
+  background: #ef4444;
+}
 </style>
 </head>
-<body class="bg-black text-white">
+<body class="bg-black text-white" style="font-family: Arial, sans-serif;">
 
-<!-- HEADER with animated logo -->
-<header class="bg-gray-900 p-6 text-center flex flex-col items-center space-y-2">
-  <img src="data/logo.png" alt="Roadiez Adventure Club Logo" class="w-24 h-24 mb-2">
-  <h1 class="text-4xl font-bold text-red-500" id="animated-title"></h1>
-  <p class="text-gray-400">The Brotherhood on Two Wheels</p>
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <span id="lightbox-close" onclick="closeLightbox()">&times;</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- FLOATING REGISTER -->
+<a href="https://forms.gle/ZZJarQzaS5U5zNNb8" target="_blank" class="floating-register">
+  🏍️ Register Now
+</a>
+
+<!-- HEADER -->
+<header style="background:#0d0d0d; border-bottom: 1px solid #1a1a1a; padding: 20px 32px; display:flex; align-items:center; justify-content:space-between;">
+  <div style="display:flex; align-items:center; gap:16px;">
+    <img src="data/logo.png" alt="Logo" style="width:64px; height:64px; border-radius:50%; object-fit:cover;">
+    <div>
+      <h1 id="animated-title" style="font-size:28px; letter-spacing:4px;"></h1>
+      <p style="color:#888; font-size:11px; letter-spacing:3px; text-transform:uppercase;">The Brotherhood on Two Wheels</p>
+    </div>
+  </div>
+  <nav style="display:flex; gap:28px;">
+    <a href="#" style="color:#aaa; text-decoration:none; font-size:13px; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Home</a>
+    <a href="#events" style="color:#aaa; text-decoration:none; font-size:13px; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Events</a>
+    <a href="#gallery" style="color:#aaa; text-decoration:none; font-size:13px; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Gallery</a>
+    <a href="#contact" style="color:#aaa; text-decoration:none; font-size:13px; font-weight:600; letter-spacing:1px; text-transform:uppercase;">Contact</a>
+  </nav>
 </header>
 
-<!-- NAV -->
-<nav class="bg-gray-800 p-4 text-center space-x-6">
-  <a href="#" class="text-white hover:text-red-500 font-semibold">Home</a>
-  <a href="#" class="text-white hover:text-red-500 font-semibold">About Us</a>
-  <a href="#" class="text-white hover:text-red-500 font-semibold">Events</a>
-  <a href="#" class="text-white hover:text-red-500 font-semibold">Gallery</a>
-  <a href="#" class="text-white hover:text-red-500 font-semibold">Contact</a>
-</nav>
-
 <!-- HERO SLIDER -->
-<section class="relative h-96 overflow-hidden">
-  <div class="slide active" style="background-image: url('data/race1.jpg');"></div>
-  <div class="slide" style="background-image: url('data/race2.jpg');"></div>
-  <div class="slide" style="background-image: url('data/race3.jpg');"></div>
-  <div class="slide" style="background-image: url('data/race4.jpg');"></div>
-  <div class="slide" style="background-image: url('data/race5.jpg');"></div>
-  <div class="slide" style="background-image: url('data/race6.jpg');"></div>
-  <div class="slide" style="background-image: url('data/race7.jpg');"></div>
-  <!-- Overlay content -->
-  <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center gap-6">
-    <h2 class="text-3xl md:text-5xl bg-black bg-opacity-60 p-4 rounded text-white">Ride Fast, Ride Free</h2>
-    <a href="https://forms.gle/ZZJarQzaS5U5zNNb8" target="_blank" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full text-xl shadow-lg transition duration-300">
-      🏍️ Register Now
-    </a>
+<section style="position:relative; height:520px; overflow:hidden;">
+  <div class="hero-slide active" style="background-image:url('data/race1.jpg');"></div>
+  <div class="hero-slide" style="background-image:url('data/race2.jpg');"></div>
+  <div class="hero-slide" style="background-image:url('data/race3.jpg');"></div>
+  <div class="hero-slide" style="background-image:url('data/race4.jpg');"></div>
+  <div class="hero-slide" style="background-image:url('data/race5.jpg');"></div>
+  <div class="hero-slide" style="background-image:url('data/race6.jpg');"></div>
+  <div class="hero-slide" style="background-image:url('data/race7.jpg');"></div>
+  <div style="position:absolute; inset:0; background:linear-gradient(to bottom, #00000066, #000000cc); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:20px;">
+    <div style="background:#ef444422; border:1px solid #ef444444; color:#ef4444; font-size:11px; letter-spacing:4px; text-transform:uppercase; padding:6px 20px; border-radius:20px;">Get Ready For Thrill</div>
+    <h2 style="font-size:52px; font-weight:900; letter-spacing:6px; text-transform:uppercase; line-height:1.1;">RIDE FAST,<br><span style="color:#ef4444;">RIDE FREE</span></h2>
+    <p style="color:#aaa; letter-spacing:3px; font-size:14px;">Where the road never ends</p>
+    <a href="https://forms.gle/ZZJarQzaS5U5zNNb8" target="_blank" style="background:#ef4444; color:white; padding:14px 36px; border-radius:50px; font-weight:700; font-size:16px; text-decoration:none; letter-spacing:1px; margin-top:8px;">🏍️ Register Now</a>
+  </div>
+  <!-- Slider dots -->
+  <div id="dots" style="position:absolute; bottom:20px; left:50%; transform:translateX(-50%); display:flex; gap:8px;"></div>
+</section>
+
+<!-- MOTION STRIP -->
+<section style="background:#0a0a0a; padding:32px 0; overflow:hidden;">
+  <div class="strip-track" id="strip">
+    <img class="strip-img" src="data/race1.jpg" alt="">
+    <img class="strip-img" src="data/race2.jpg" alt="">
+    <img class="strip-img" src="data/race3.jpg" alt="">
+    <img class="strip-img" src="data/race4.jpg" alt="">
+    <img class="strip-img" src="data/race5.jpg" alt="">
+    <img class="strip-img" src="data/race6.jpg" alt="">
+    <img class="strip-img" src="data/race7.jpg" alt="">
+    <!-- Duplicate for infinite loop -->
+    <img class="strip-img" src="data/race1.jpg" alt="">
+    <img class="strip-img" src="data/race2.jpg" alt="">
+    <img class="strip-img" src="data/race3.jpg" alt="">
+    <img class="strip-img" src="data/race4.jpg" alt="">
+    <img class="strip-img" src="data/race5.jpg" alt="">
+    <img class="strip-img" src="data/race6.jpg" alt="">
+    <img class="strip-img" src="data/race7.jpg" alt="">
   </div>
 </section>
 
 <!-- EVENTS -->
-<section class="p-8 text-center">
-  <h3 class="text-3xl text-red-500 mb-6">Events</h3>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="bg-gray-800 p-6 rounded-xl shadow-xl">
-      <h4 class="text-xl text-red-500 mb-2">Hill Sprint</h4>
-      <p class="text-gray-300">July 20, 2025 | Pune to Lonavala</p>
+<section id="events" style="padding:64px 32px; background:#0d0d0d;">
+  <div style="text-align:center; margin-bottom:40px;" class="fade-up">
+    <div class="section-badge">Upcoming</div>
+    <h3 style="font-size:36px; font-weight:900; letter-spacing:2px; margin-top:8px;">EVENTS</h3>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:24px; max-width:1000px; margin:0 auto;">
+    <div class="event-card fade-up">
+      <div class="event-card-top"></div>
+      <div style="padding:24px;">
+        <div style="color:#ef4444; font-size:11px; letter-spacing:3px; text-transform:uppercase; margin-bottom:8px;">Racing</div>
+        <h4 style="font-size:20px; font-weight:700; margin-bottom:8px;">Hill Sprint</h4>
+        <p style="color:#888; font-size:14px;">July 20, 2025</p>
+        <p style="color:#666; font-size:13px; margin-top:4px;">Pune to Lonavala</p>
+      </div>
     </div>
-    <div class="bg-gray-800 p-6 rounded-xl shadow-xl">
-      <h4 class="text-xl text-red-500 mb-2">Desert Rally</h4>
-      <p class="text-gray-300">August 15, 2025 | Rajasthan Expedition</p>
+    <div class="event-card fade-up">
+      <div class="event-card-top"></div>
+      <div style="padding:24px;">
+        <div style="color:#ef4444; font-size:11px; letter-spacing:3px; text-transform:uppercase; margin-bottom:8px;">Expedition</div>
+        <h4 style="font-size:20px; font-weight:700; margin-bottom:8px;">Desert Rally</h4>
+        <p style="color:#888; font-size:14px;">August 15, 2025</p>
+        <p style="color:#666; font-size:13px; margin-top:4px;">Rajasthan Expedition</p>
+      </div>
     </div>
-    <div class="bg-gray-800 p-6 rounded-xl shadow-xl">
-      <h4 class="text-xl text-red-500 mb-2">Night Ride</h4>
-      <p class="text-gray-300">September 5, 2025 | City Night Cruise</p>
+    <div class="event-card fade-up">
+      <div class="event-card-top"></div>
+      <div style="padding:24px;">
+        <div style="color:#ef4444; font-size:11px; letter-spacing:3px; text-transform:uppercase; margin-bottom:8px;">Night Ride</div>
+        <h4 style="font-size:20px; font-weight:700; margin-bottom:8px;">Night Ride</h4>
+        <p style="color:#888; font-size:14px;">September 5, 2025</p>
+        <p style="color:#666; font-size:13px; margin-top:4px;">City Night Cruise</p>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- GALLERY -->
-<section class="p-8 text-center">
-  <h3 class="text-3xl text-red-500 mb-6">Photo Gallery</h3>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-    <div class="gallery-img"><img src="data/race1.jpg" alt="Race 1"></div>
-    <div class="gallery-img"><img src="data/race2.jpg" alt="Race 2"></div>
-    <div class="gallery-img"><img src="data/race3.jpg" alt="Race 3"></div>
-    <div class="gallery-img"><img src="data/race4.jpg" alt="Race 4"></div>
-    <div class="gallery-img"><img src="data/race5.jpg" alt="Race 5"></div>
-    <div class="gallery-img"><img src="data/race6.jpg" alt="Race 6"></div>
-    <div class="gallery-img"><img src="data/race7.jpg" alt="Race 7"></div>
+<section id="gallery" style="padding:64px 32px; background:#080808;">
+  <div style="text-align:center; margin-bottom:40px;" class="fade-up">
+    <div class="section-badge">Memories</div>
+    <h3 style="font-size:36px; font-weight:900; letter-spacing:2px; margin-top:8px;">GALLERY</h3>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:16px; max-width:1100px; margin:0 auto;">
+    <div class="gallery-item fade-up" onclick="openLightbox('data/race1.jpg')">
+      <img src="data/race1.jpg" alt="Race 1">
+      <div class="gallery-overlay"><i class="fas fa-expand"></i></div>
+    </div>
+    <div class="gallery-item fade-up" onclick="openLightbox('data/race2.jpg')">
+      <img src="data/race2.jpg" alt="Race 2">
+      <div class="gallery-overlay"><i class="fas fa-expand"></i></div>
+    </div>
+    <div class="gallery-item fade-up" onclick="openLightbox('data/race3.jpg')">
+      <img src="data/race3.jpg" alt="Race 3">
+      <div class="gallery-overlay"><i class="fas fa-expand"></i></div>
+    </div>
+    <div class="gallery-item fade-up" onclick="openLightbox('data/race4.jpg')">
+      <img src="data/race4.jpg" alt="Race 4">
+      <div class="gallery-overlay"><i class="fas fa-expand"></i></div>
+    </div>
+    <div class="gallery-item fade-up" onclick="openLightbox('data/race5.jpg')">
+      <img src="data/race5.jpg" alt="Race 5">
+      <div class="gallery-overlay"><i class="fas fa-expand"></i></div>
+    </div>
+    <div class="gallery-item fade-up" onclick="openLightbox('data/race6.jpg')">
+      <img src="data/race6.jpg" alt="Race 6">
+      <div class="gallery-overlay"><i class="fas fa-expand"></i></div>
+    </div>
+    <div class="gallery-item fade-up" onclick="openLightbox('data/race7.jpg')">
+      <img src="data/race7.jpg" alt="Race 7">
+      <div class="gallery-overlay"><i class="fas fa-expand"></i></div>
+    </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer class="bg-gray-900 text-center py-6">
-  <nav class="flex justify-center space-x-8">
-    <a href="https://www.facebook.com/empire.story0553" target="_blank" class="text-white hover:text-blue-500 font-semibold">
-      <i class="fab fa-facebook-f"></i> Facebook
-    </a>
-    <a href="https://www.instagram.com/roadiez_club" target="_blank" class="text-white hover:text-pink-500 font-semibold">
-      <i class="fab fa-instagram"></i> Instagram
-    </a>
-    <a href="https://www.youtube.com/@Roadiezclub" target="_blank" class="text-white hover:text-red-500 font-semibold">
-      <i class="fab fa-youtube"></i> YouTube
-    </a>
-    <a href="https://wa.me/919423252530" target="_blank" class="text-white hover:text-green-500 font-semibold">
-      <i class="fab fa-whatsapp"></i> WhatsApp
-    </a>
-  </nav>
-</footer>
-<footer class="bg-gray-900 text-center">
-  <div class="bg-gray-800 py-2 text-sm">
-    &copy; 2025 Roadiez Adventure Club. All rights reserved.
+<!-- CONTACT / FOOTER -->
+<section id="contact" style="background:#0d0d0d; padding:64px 32px; border-top:1px solid #1a1a1a;">
+  <div style="text-align:center; margin-bottom:40px;" class="fade-up">
+    <div class="section-badge">Connect</div>
+    <h3 style="font-size:36px; font-weight:900; letter-spacing:2px; margin-top:8px;">FIND US ON</h3>
   </div>
+  <div style="display:flex; justify-content:center; gap:32px; flex-wrap:wrap;" class="fade-up">
+    <a href="https://www.facebook.com/empire.story0553" target="_blank" style="display:flex; flex-direction:column; align-items:center; gap:10px; text-decoration:none; color:white; transition:color 0.3s;">
+      <div style="width:56px; height:56px; border-radius:50%; background:#1877f222; border:1px solid #1877f244; display:flex; align-items:center; justify-content:center;">
+        <i class="fab fa-facebook-f" style="font-size:22px; color:#1877f2;"></i>
+      </div>
+      <span style="font-size:12px; color:#888; letter-spacing:1px;">Facebook</span>
+    </a>
+    <a href="https://www.instagram.com/roadiez_club" target="_blank" style="display:flex; flex-direction:column; align-items:center; gap:10px; text-decoration:none; color:white;">
+      <div style="width:56px; height:56px; border-radius:50%; background:#e104a322; border:1px solid #e104a344; display:flex; align-items:center; justify-content:center;">
+        <i class="fab fa-instagram" style="font-size:22px; color:#e1306c;"></i>
+      </div>
+      <span style="font-size:12px; color:#888; letter-spacing:1px;">Instagram</span>
+    </a>
+    <a href="https://www.youtube.com/@Roadiezclub" target="_blank" style="display:flex; flex-direction:column; align-items:center; gap:10px; text-decoration:none; color:white;">
+      <div style="width:56px; height:56px; border-radius:50%; background:#ff000022; border:1px solid #ff000044; display:flex; align-items:center; justify-content:center;">
+        <i class="fab fa-youtube" style="font-size:22px; color:#ff0000;"></i>
+      </div>
+      <span style="font-size:12px; color:#888; letter-spacing:1px;">YouTube</span>
+    </a>
+    <a href="https://wa.me/919423252530" target="_blank" style="display:flex; flex-direction:column; align-items:center; gap:10px; text-decoration:none; color:white;">
+      <div style="width:56px; height:56px; border-radius:50%; background:#25d36622; border:1px solid #25d36644; display:flex; align-items:center; justify-content:center;">
+        <i class="fab fa-whatsapp" style="font-size:22px; color:#25d366;"></i>
+      </div>
+      <span style="font-size:12px; color:#888; letter-spacing:1px;">WhatsApp</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER BOTTOM -->
+<footer style="background:#080808; text-align:center; padding:16px; border-top:1px solid #1a1a1a;">
+  <p style="color:#444; font-size:12px; letter-spacing:1px;">&copy; 2025 Roadiez Adventure Club. All rights reserved.</p>
 </footer>
 
 <script>
-  // Animated title - letter by letter
-  const title = "Roadiez Adventure Club";
-  const el = document.getElementById('animated-title');
-  title.split('').forEach((char, i) => {
-    const span = document.createElement('span');
-    span.className = 'logo-letter';
-    span.style.animationDelay = (i * 0.08) + 's';
-    span.textContent = char === ' ' ? '\u00A0' : char;
-    el.appendChild(span);
-  });
+// ===== ANIMATED TITLE =====
+const titleText = "Roadiez Adventure Club";
+const titleEl = document.getElementById('animated-title');
+titleText.split('').forEach((char, i) => {
+  const span = document.createElement('span');
+  span.className = 'logo-letter';
+  span.style.animationDelay = (i * 0.07) + 's';
+  span.textContent = char === ' ' ? '\u00A0' : char;
+  titleEl.appendChild(span);
+});
 
-  // Hero Slider
-  const slides = document.querySelectorAll('.slide');
-  let current = 0;
-  setInterval(() => {
-    slides[current].classList.remove('active');
-    current = (current + 1) % slides.length;
-    slides[current].classList.add('active');
-  }, 3000);
+// ===== HERO SLIDER =====
+const slides = document.querySelectorAll('.hero-slide');
+const dotsContainer = document.getElementById('dots');
+let current = 0;
+
+slides.forEach((_, i) => {
+  const dot = document.createElement('div');
+  dot.style.cssText = `width:8px;height:8px;border-radius:50%;background:${i===0?'#ef4444':'#ffffff44'};cursor:pointer;transition:background 0.3s;`;
+  dot.onclick = () => goToSlide(i);
+  dotsContainer.appendChild(dot);
+});
+
+function goToSlide(n) {
+  slides[current].classList.remove('active');
+  dotsContainer.children[current].style.background = '#ffffff44';
+  current = n;
+  slides[current].classList.add('active');
+  dotsContainer.children[current].style.background = '#ef4444';
+}
+
+setInterval(() => {
+  goToSlide((current + 1) % slides.length);
+}, 3500);
+
+// ===== LIGHTBOX =====
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if(e.target === this) closeLightbox();
+});
+
+// ===== SCROLL FADE =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 </script>
 
 </body>
