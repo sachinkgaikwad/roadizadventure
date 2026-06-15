@@ -1,18 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
 <link rel="stylesheet" href="data/style.css">
 <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Roadiez Adventure Club</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-yHRe+5btYM9FZ8mWzHRQ4gdF9/9XAG5gyTGr2gGCdeYUyGqGde4G4Ow6Ml62EuL3A9nYUKK7XIBJxGo4c7c3vA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roadiez Adventure Club</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-yHRe+5btYM9FZ8mWzHRQ4gdF9/9XAG5gyTGr2gGCdeYUyGqGde4G4Ow6Ml62EuL3A9nYUKK7XIBJxGo4c7c3vA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+  /* Animated Logo Letters */
+  .logo-letter {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(-30px);
+    animation: dropLetter 0.5s forwards;
+  }
+  @keyframes dropLetter {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Hero Slider */
+  .slide { display: none; position: absolute; inset: 0; background-size: cover; background-position: center; transition: opacity 0.8s ease-in-out; }
+  .slide.active { display: block; }
+
+  /* Gallery hover */
+  .gallery-img { overflow: hidden; border-radius: 12px; }
+  .gallery-img img { transition: transform 0.4s ease; width: 100%; height: 200px; object-fit: cover; }
+  .gallery-img img:hover { transform: scale(1.08); }
+</style>
 </head>
 <body class="bg-black text-white">
+
+<!-- HEADER with animated logo -->
 <header class="bg-gray-900 p-6 text-center flex flex-col items-center space-y-2">
   <img src="data/logo.png" alt="Roadiez Adventure Club Logo" class="w-24 h-24 mb-2">
-<h1 class="text-4xl font-bold text-red-500">Roadiez Adventure Club</h1>
+  <h1 class="text-4xl font-bold text-red-500" id="animated-title"></h1>
   <p class="text-gray-400">The Brotherhood on Two Wheels</p>
 </header>
+
+<!-- NAV -->
 <nav class="bg-gray-800 p-4 text-center space-x-6">
   <a href="#" class="text-white hover:text-red-500 font-semibold">Home</a>
   <a href="#" class="text-white hover:text-red-500 font-semibold">About Us</a>
@@ -21,15 +47,25 @@
   <a href="#" class="text-white hover:text-red-500 font-semibold">Contact</a>
 </nav>
 
-<!-- ✅ YAHAN CHANGE KIYA - flex-col add kiya aur Register button add kiya -->
-<section class="h-96 bg-cover bg-center flex flex-col items-center justify-center gap-6" style="background-image: url('data/bike2.png');">
-  <h2 class="text-3xl md:text-5xl bg-black bg-opacity-60 p-4 rounded">Ride Fast, Ride Free</h2>
-  <a href="https://forms.gle/ZZJarQzaS5U5zNNb8" target="_blank" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full text-xl shadow-lg transition duration-300">
-    🏍️ Register Now
-  </a>
+<!-- HERO SLIDER -->
+<section class="relative h-96 overflow-hidden">
+  <div class="slide active" style="background-image: url('data/race1.jpg');"></div>
+  <div class="slide" style="background-image: url('data/race2.jpg');"></div>
+  <div class="slide" style="background-image: url('data/race3.jpg');"></div>
+  <div class="slide" style="background-image: url('data/race4.jpg');"></div>
+  <div class="slide" style="background-image: url('data/race5.jpg');"></div>
+  <div class="slide" style="background-image: url('data/race6.jpg');"></div>
+  <div class="slide" style="background-image: url('data/race7.jpg');"></div>
+  <!-- Overlay content -->
+  <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center gap-6">
+    <h2 class="text-3xl md:text-5xl bg-black bg-opacity-60 p-4 rounded text-white">Ride Fast, Ride Free</h2>
+    <a href="https://forms.gle/ZZJarQzaS5U5zNNb8" target="_blank" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full text-xl shadow-lg transition duration-300">
+      🏍️ Register Now
+    </a>
+  </div>
 </section>
-<!-- ✅ CHANGE YAHAN TAK -->
 
+<!-- EVENTS -->
 <section class="p-8 text-center">
   <h3 class="text-3xl text-red-500 mb-6">Events</h3>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -47,15 +83,22 @@
     </div>
   </div>
 </section>
+
+<!-- GALLERY -->
 <section class="p-8 text-center">
   <h3 class="text-3xl text-red-500 mb-6">Photo Gallery</h3>
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-    <img src="data/biker1.png" class="rounded-xl" alt="Biker 1">
-    <img src="data/biker2.png" class="rounded-xl" alt="Biker 2">
-    <img src="data/biker3.png" class="rounded-xl" alt="Biker 3">
-    <img src="data/biker4.png" class="rounded-xl" alt="Biker 4">
+    <div class="gallery-img"><img src="data/race1.jpg" alt="Race 1"></div>
+    <div class="gallery-img"><img src="data/race2.jpg" alt="Race 2"></div>
+    <div class="gallery-img"><img src="data/race3.jpg" alt="Race 3"></div>
+    <div class="gallery-img"><img src="data/race4.jpg" alt="Race 4"></div>
+    <div class="gallery-img"><img src="data/race5.jpg" alt="Race 5"></div>
+    <div class="gallery-img"><img src="data/race6.jpg" alt="Race 6"></div>
+    <div class="gallery-img"><img src="data/race7.jpg" alt="Race 7"></div>
   </div>
 </section>
+
+<!-- FOOTER -->
 <footer class="bg-gray-900 text-center py-6">
   <nav class="flex justify-center space-x-8">
     <a href="https://www.facebook.com/empire.story0553" target="_blank" class="text-white hover:text-blue-500 font-semibold">
@@ -77,5 +120,28 @@
     &copy; 2025 Roadiez Adventure Club. All rights reserved.
   </div>
 </footer>
+
+<script>
+  // Animated title - letter by letter
+  const title = "Roadiez Adventure Club";
+  const el = document.getElementById('animated-title');
+  title.split('').forEach((char, i) => {
+    const span = document.createElement('span');
+    span.className = 'logo-letter';
+    span.style.animationDelay = (i * 0.08) + 's';
+    span.textContent = char === ' ' ? '\u00A0' : char;
+    el.appendChild(span);
+  });
+
+  // Hero Slider
+  const slides = document.querySelectorAll('.slide');
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 3000);
+</script>
+
 </body>
 </html>
